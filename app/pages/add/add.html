@@ -1,0 +1,17 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title>Firebase To Do</ion-title>
+        <ion-buttons end>
+            <button (click)="save()"><ion-icon name="checkmark"></ion-icon></button>
+        </ion-buttons>
+    </ion-navbar>
+</ion-header>
+ 
+<ion-content padding>
+
+        <ion-item>
+            <ion-label floating>Todo Item</ion-label>
+            <ion-input type="text" [(ngModel)]="todoItem"></ion-input>
+        </ion-item>
+    
+</ion-content>

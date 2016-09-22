@@ -1,0 +1,31 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Firebase To Do
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <div>
+<h1 class="loginHead">LOGIN</h1>
+  </div>
+  <ion-item>
+    <ion-label primary floating>Email</ion-label>
+    <ion-input type="email" [(ngModel)]="userLogin.email"></ion-input>
+  </ion-item>
+    <ion-item>
+    <ion-label primary floating>Password</ion-label>
+    <ion-input type="password" [(ngModel)]="userLogin.password"></ion-input>
+  </ion-item>
+  <div class="login">
+  <button class="button button-positive" (click)="logInUser()" >
+  LOGIN
+</button>
+  <ion-label class="account">Don't Have an Account?&nbsp; <span><a (click)="goToSignUp()">Sign Up</a></span></ion-label>
+  </div>
+
+
+  
+ 
+</ion-content>
