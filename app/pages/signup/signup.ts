@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, AlertController} from 'ionic-angular';
+import { NavController, AlertController, LoadingController} from 'ionic-angular';
 import {HomePage} from '../home/home';
 import {AngularFire} from 'angularfire2';
 
@@ -14,17 +14,28 @@ export class SignUpPage {
     password: ''
   }
 
-  constructor(public navCtrl: NavController, alertControl : AlertController, firebase:AngularFire) {
+  constructor(public navCtrl: NavController, public alert : AlertController, firebase:AngularFire ,public loadingController:LoadingController) {
     this.firebase = firebase      
 
   }
-
+  presentLoading() {
+    let loader = this.loadingController.create({
+      content: "Please wait.",
+      duration: 1500
+    });
+    loader.present();
+  }
   goToLogIn(){
     // console.log("goToLogIn",f.value);
     this.navCtrl.popToRoot();
 
   } 
   signUp(){
+    if (this.form.email == "" || this.form.name == "" || this.form.password == ""){
+      this.presentAlert()
+    }
+    else{
+    this.presentLoading()
     let user = {email: this.form.email, password : this.form.password}
     this.firebase.auth.createUser(user).then((onSuccess)=>{
         console.log('success',onSuccess);
@@ -50,5 +61,14 @@ export class SignUpPage {
       })
 
   })
+  }
+}
+presentAlert() {
+  let alert = this.alert.create({
+    title: 'Sorry',
+    subTitle: 'All fields are required',
+    buttons: ['OK']
+  });
+  alert.present();
 }
 }

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, AlertController } from 'ionic-angular';
+import { NavController, AlertController, LoadingController } from 'ionic-angular';
 import {SignUpPage} from '../signup/signup';
 import {ListPage} from '../list/list';
 import {Observable} from 'rxjs/Observable';
@@ -19,7 +19,7 @@ export class HomePage {
     password:''
 
   }
-  constructor(public navCtrl: NavController, public alert: AlertController, firebase: AngularFire , auth:FirebaseAuth) {
+  constructor(public navCtrl: NavController, public alert: AlertController, firebase: AngularFire , auth:FirebaseAuth ,public loadingController : LoadingController) {
     this.firebase = firebase
     this.auth = auth
     this.userLogin.email = "aa@c.com"
@@ -31,19 +31,27 @@ export class HomePage {
     console.log("goToSignUp");
     this.navCtrl.push(SignUpPage);
   }
+  presentLoading() {
+    let loader = this.loadingController.create({
+      content: "Please wait.",
+      duration: 1500
+    });
+    loader.present();
+  }
   logInUser(){
     if (this.userLogin.email == '' || this.userLogin.password == ''){
       this.presentAlert()
 
     }
     else{
+      this.presentLoading()
       this.firebase.auth.login(this.userLogin).then((success)=>{
     UserService.getInstance().uid = success['uid']
      this.items = this.firebase.database.list('/users/'+success['uid'])
 
      this.items.subscribe(snapshots => {
     snapshots.forEach(snapshot => {
-      console.log(snapshot.$key,snapshot.$value)
+ //     console.log(snapshot.$key,snapshot.$value)
       if (snapshot.$key == "name"){
       UserService.getInstance().name = snapshot.$value
     }
