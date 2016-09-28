@@ -12,7 +12,11 @@ var core_1 = require('@angular/core');
 var ionic_angular_1 = require('ionic-angular');
 var ionic_native_1 = require('ionic-native');
 var home_1 = require('./pages/home/home');
-var angularfire2_1 = require('angularfire2');
+// import {
+//     FIREBASE_PROVIDERS, defaultFirebase, firebaseAuthConfig ,AuthMethods,
+//   AuthProviders, FirebaseListObservable,
+//     AngularFire
+// } from 'angularfire2';
 var MyApp = (function () {
     function MyApp(platform) {
         this.platform = platform;
@@ -26,17 +30,11 @@ var MyApp = (function () {
     MyApp = __decorate([
         core_1.Component({
             template: '<ion-nav [root]="rootPage"></ion-nav>',
-            providers: [angularfire2_1.FIREBASE_PROVIDERS, angularfire2_1.defaultFirebase({
-                    apiKey: "AIzaSyDTagSCAFipCD2BLiKl8If-Op5EQpdbodk",
-                    authDomain: "fir-start-3ff0d.firebaseapp.com",
-                    databaseURL: "https://fir-start-3ff0d.firebaseio.com",
-                    storageBucket: "fir-start-3ff0d.appspot.com",
-                })
-            ]
         }), 
         __metadata('design:paramtypes', [ionic_angular_1.Platform])
     ], MyApp);
     return MyApp;
 }());
 exports.MyApp = MyApp;
+core_1.enableProdMode();
 ionic_angular_1.ionicBootstrap(MyApp);

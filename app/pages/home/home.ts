@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, AlertController, LoadingController } from 'ionic-angular';
+import { NavController, ToastController, LoadingController, Loading } from 'ionic-angular';
 import {SignUpPage} from '../signup/signup';
 import {ListPage} from '../list/list';
 import {Observable} from 'rxjs/Observable';
@@ -14,7 +14,7 @@ import * as firebase from 'firebase';
 })
 export class HomePage {
   
- loader:any
+  loader: Loading
   items : any
   firbaseRef : any
   users: Observable<any[]>;
@@ -23,7 +23,7 @@ export class HomePage {
     password:''
 
   }
-  constructor(public navCtrl: NavController, public alert: AlertController, public loadingController : LoadingController) {
+  constructor(public navCtrl: NavController, public toast: ToastController, public loadingController : LoadingController) {
   
     this.userLogin.email = "a@c.com"
     this.userLogin.password = "111111"
@@ -35,21 +35,13 @@ export class HomePage {
     console.log("goToSignUp");
     this.navCtrl.push(SignUpPage);
   }
-  presentLoading() {
-    this.loader = this.loadingController.create({
-      content: "Please wait.",
-      duration: 1500
-    });
-    this.loader.present();
-    
-  }
+   
   logInUser(){
     if (this.userLogin.email == '' || this.userLogin.password == ''){
       this.presentAlert('Enter an Email and Passord to Log in.')
 
     }
     else{
-      this.presentLoading()
         firebase.auth().signInWithEmailAndPassword(this.userLogin.email,this.userLogin.password).then(onSuccess =>{
           
        UserService.getInstance().uid = onSuccess['uid']
@@ -61,13 +53,9 @@ export class HomePage {
 
        })   
            this.navCtrl.push(ListPage); 
-        },onFailure => {
-          console.log(onFailure)
-          let error = onFailure['message']
-          this.presentAlert(error)
-
         }).catch(exception =>{
           console.log(exception)
+          this.presentAlert( exception['message'])
         })
 
 
@@ -104,20 +92,12 @@ export class HomePage {
   }
 presentAlert(message:string) {
   console.log(message)
-  let alert = this.alert.create({
-    title: 'Sorry',
-    subTitle: message,
-    buttons: [ {
-          text: 'OK',
-          handler : (data) => {
-            //alert.destroy()
+   let toast = this.toast.create({
+      message: message,
+      duration: 2000,
+      position: 'middle'
+    });
 
-        //    console.log('pressed'+data)
-          }
-    }]
-  });
-  
-  
-  alert.present();
+    toast.present(toast);
 }
 }

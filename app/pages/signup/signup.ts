@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, AlertController, LoadingController} from 'ionic-angular';
+import { NavController, ToastController, LoadingController, Loading} from 'ionic-angular';
 import {HomePage} from '../home/home';
 // import {AngularFire} from 'angularfire2';
 import * as firebase from 'firebase';
@@ -8,23 +8,30 @@ import * as firebase from 'firebase';
   templateUrl: 'build/pages/signup/signup.html'
 })
 export class SignUpPage {
- 
+ loader:Loading
   form = {
     name: '',
     email: '',
     password: ''
   }
 
-  constructor(public navCtrl: NavController, public alert : AlertController, public loadingController:LoadingController) {
-          
-
+  constructor(public navCtrl: NavController, public toast : ToastController, public loadingController:LoadingController) {
+        
   }
-  presentLoading() {
-    let loader = this.loadingController.create({
-      content: "Please wait.",
-      duration: 1500
+  presentLoading(showLoading:boolean) {
+    
+    if (showLoading == true){
+  this.loader = this.loadingController.create({
+      content: "Please wait."
+    //  duration: 5000
     });
-    loader.present();
+    console.log('Sabar Kar')
+    this.loader.present();
+    }
+    else {
+     this.loader.dismiss()
+   
+   }
   }
   goToLogIn(){
     // console.log("goToLogIn",f.value);
@@ -36,7 +43,7 @@ export class SignUpPage {
       this.presentAlert( 'All fields are required')
     }
     else{
-    this.presentLoading()
+    this.presentLoading(true)
    
         
        let user = {name:this.form.name , email: this.form.email, password : this.form.password} 
@@ -49,17 +56,27 @@ export class SignUpPage {
       
          
          console.log("user"+userCreated)
-     }, creationFailed=>{
-       console.log(creationFailed)
-                 let error = creationFailed['message'] as string
-       this.presentAlert(error)
-        })
+    //    console.log(creationFailed)
+    //              let error = creationFailed['message'] as string
+    //    this.presentAlert(error)
+    //     })
+      })//, creationFailed=>{
         
-        }, onFailure => {
+        }/*, onFailure => {
           console.log(onFailure)
-                    let error = onFailure['message'] as string
-                 this.presentAlert(error)
-        })
+          //           let error = onFailure['message'] as string
+          //  setTimeout(function(){
+       //  },1000);
+       }*/).catch(failure=>{
+          this.presentLoading(false)
+     // setTimeout(timeout=>{
+         console.log(failure)
+
+         this.presentAlert(failure['message'])
+        
+       //   },2000)
+  
+     })
         
         
         
@@ -69,11 +86,12 @@ export class SignUpPage {
   }
 }
 presentAlert(message:string) {
-  let alert = this.alert.create({
-    title: 'Sorry',
-    subTitle:message,
-    buttons: ['OK']
-  });
-  alert.present();
+ let toast = this.toast.create({
+      message: message,
+      duration: 2000,
+      position: 'middle'
+    });
+
+    toast.present(toast);
 }
 }

@@ -9,43 +9,58 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var ionic_angular_1 = require('ionic-angular');
-var angularfire2_1 = require('angularfire2');
+// import {AngularFire} from 'angularfire2';
+var userservice_1 = require("../../service/userservice");
+var firebase = require('firebase');
 var AddPage = (function () {
-    function AddPage(nav, firebase) {
+    // public firebase: AngularFire;
+    function AddPage(nav, navParams) {
         this.nav = nav;
-        this.firebase = firebase;
-        this.todoList = JSON.parse(localStorage.getItem("todos"));
-        if (!this.todoList) {
-            this.todoList = [];
+        this.getParams = navParams.get('itemToUpdate');
+        if (this.getParams != null) {
+            this.todoItem = this.getParams.val().description;
         }
-        this.todoItem = "";
+        else {
+            console.log(this.getParams.val());
+            this.todoItem = "";
+        }
     }
     AddPage.prototype.save = function () {
+        var _this = this;
         if (this.todoItem != "") {
-            this.todoList.push(this.todoItem);
-            var textItems = this.firebase.database.list('/textItems');
-            textItems.push({
-                "title": "Ionic 2 with Firebase and Typescript",
-                "description": "Test Message from ionic app",
-                // auth data from the navParam object...
-                "user": "Aaqib Hussain",
-                "timestamp": (new Date()).getTime()
-            }).then(function (_data) {
-                console.log(_data);
-                alert("Item Successfully Added");
-            }).catch(function (_error) {
-                console.log(_error);
-                alert("Error Adding Item");
-            });
+            //  this.todoList.push(this.todoItem);
+            if (this.getParams != null) {
+                var objectKey = this.getParams.key;
+                var updatedData = { "description": this.todoItem,
+                    "user": userservice_1.UserService.getInstance().name,
+                    "timestamp": (new Date()).getTime()
+                };
+                var update = firebase.database().ref('/toDoListData/' + userservice_1.UserService.getInstance().uid).child(objectKey).update(updatedData, function (updateSuccess) {
+                    console.log('Updated' + updateSuccess);
+                    _this.nav.pop();
+                });
+            }
+            else {
+                var toDoListData = firebase.database().ref('/toDoListData/' + userservice_1.UserService.getInstance().uid);
+                toDoListData.push({
+                    "description": this.todoItem,
+                    "user": userservice_1.UserService.getInstance().name,
+                    "timestamp": (new Date()).getTime()
+                }).then(function (_data) {
+                    console.log(_data);
+                    _this.nav.pop();
+                }).catch(function (_error) {
+                    console.log(_error);
+                });
+            }
         }
-        localStorage.setItem("todos", JSON.stringify(this.todoList));
-        this.nav.pop();
+        //    localStorage.setItem("todos", JSON.stringify(this.todoList));
     };
     AddPage = __decorate([
         ionic_angular_1.Page({
             templateUrl: 'build/pages/add/add.html'
         }), 
-        __metadata('design:paramtypes', [ionic_angular_1.NavController, angularfire2_1.AngularFire])
+        __metadata('design:paramtypes', [ionic_angular_1.NavController, ionic_angular_1.NavParams])
     ], AddPage);
     return AddPage;
 }());
