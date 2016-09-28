@@ -1,21 +1,22 @@
 import { Component } from '@angular/core';
 import { NavController, AlertController, LoadingController} from 'ionic-angular';
 import {HomePage} from '../home/home';
-import {AngularFire} from 'angularfire2';
+// import {AngularFire} from 'angularfire2';
+import * as firebase from 'firebase';
 
 @Component({
   templateUrl: 'build/pages/signup/signup.html'
 })
 export class SignUpPage {
-  public firebase: AngularFire
+ 
   form = {
     name: '',
     email: '',
     password: ''
   }
 
-  constructor(public navCtrl: NavController, public alert : AlertController, firebase:AngularFire ,public loadingController:LoadingController) {
-    this.firebase = firebase      
+  constructor(public navCtrl: NavController, public alert : AlertController, public loadingController:LoadingController) {
+          
 
   }
   presentLoading() {
@@ -32,41 +33,45 @@ export class SignUpPage {
   } 
   signUp(){
     if (this.form.email == "" || this.form.name == "" || this.form.password == ""){
-      this.presentAlert()
+      this.presentAlert( 'All fields are required')
     }
     else{
     this.presentLoading()
-    let user = {email: this.form.email, password : this.form.password}
-    this.firebase.auth.createUser(user).then((onSuccess)=>{
-        console.log('success',onSuccess);
-        let uid = {uid: onSuccess["uid"]}
-        var ref = this.firebase.database;
+   
+        
        let user = {name:this.form.name , email: this.form.email, password : this.form.password} 
         //send the received uid
-        ref.object('/users/'+uid.uid).set(user).then((pushSuccess) => {
-            console.log("PushSuccess:"+pushSuccess)
-        this.form.email = ""
-        this.form.name = ""
-        this.form.password = ""
-        this.navCtrl.popToRoot();
+      //  ref.object('/users/'+user.username).set(user).then((pushSuccess) => {
+        firebase.auth().createUserWithEmailAndPassword(user.email,user.password).then(onSuccess => {
+          console.log(onSuccess['uid'])
+        this.navCtrl.popToRoot();    
+        firebase.database().ref('/users/'+onSuccess['uid']).set(user).then(userCreated => {
+      
+         
+         console.log("user"+userCreated)
+     }, creationFailed=>{
+       console.log(creationFailed)
+                 let error = creationFailed['message'] as string
+       this.presentAlert(error)
+        })
+        
+        }, onFailure => {
+          console.log(onFailure)
+                    let error = onFailure['message'] as string
+                 this.presentAlert(error)
+        })
         
         
         
       //  this.navCtrl.popToRoot();
-      },(onFailure)=>{
 
-        console.log("failure",onFailure["code"]);
-                console.log("failure",onFailure["message"]);
-
-      })
-
-  })
+  //})
   }
 }
-presentAlert() {
+presentAlert(message:string) {
   let alert = this.alert.create({
     title: 'Sorry',
-    subTitle: 'All fields are required',
+    subTitle:message,
     buttons: ['OK']
   });
   alert.present();

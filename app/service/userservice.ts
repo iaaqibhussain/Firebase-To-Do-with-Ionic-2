@@ -1,9 +1,9 @@
 import {Injectable} from "@angular/core";
 @Injectable()
 export class UserService {
-   name:String
-   email:String
-   uid:String
+   name:string
+   username:string
+   uid:string
   
     private static instance:UserService;
   

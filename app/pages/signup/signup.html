@@ -16,11 +16,11 @@
   </ion-item>
   <ion-item>
     <ion-label primary floating>Email</ion-label>
-    <ion-input type="email" [(ngModel)]="form.email"></ion-input>
+    <ion-input required type="email" [(ngModel)]="form.email"></ion-input>
   </ion-item>
     <ion-item>
     <ion-label primary floating>Password</ion-label>
-    <ion-input type="password" [(ngModel)]="form.password"></ion-input>
+    <ion-input required type="password" [(ngModel)]="form.password"></ion-input>
   </ion-item>
   <div class="signBtn">
   <button class="button button-positive" (click)="signUp()" >

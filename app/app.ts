@@ -1,28 +1,31 @@
-import { Component } from '@angular/core';
+import { Component ,enableProdMode} from '@angular/core';
 import { ionicBootstrap, Platform } from 'ionic-angular';
 import { StatusBar } from 'ionic-native';
 
 import { HomePage } from './pages/home/home';
 
 
-import {
-    FIREBASE_PROVIDERS, defaultFirebase, firebaseAuthConfig ,AuthMethods,
-  AuthProviders, FirebaseListObservable,
-    AngularFire
-} from 'angularfire2';
+// import {
+//     FIREBASE_PROVIDERS, defaultFirebase, firebaseAuthConfig ,AuthMethods,
+//   AuthProviders, FirebaseListObservable,
+//     AngularFire
+// } from 'angularfire2';
 
 @Component({
   template: '<ion-nav [root]="rootPage"></ion-nav>',
-  providers: [FIREBASE_PROVIDERS, defaultFirebase({
+ /* providers: [FIREBASE_PROVIDERS, defaultFirebase({
       apiKey: "AIzaSyDTagSCAFipCD2BLiKl8If-Op5EQpdbodk",
     authDomain: "fir-start-3ff0d.firebaseapp.com",
     databaseURL: "https://fir-start-3ff0d.firebaseio.com",
     storageBucket: "fir-start-3ff0d.appspot.com",
-  }),firebaseAuthConfig({
+   }),firebaseAuthConfig({
     provider: AuthProviders.Password,
-    method: AuthMethods.Password
+    method: AuthMethods.Popup
+    ,
+     remember: 'default',
+    scope: ['email']
   })
-  ]
+  ]*/
 
 })
 export class MyApp {
@@ -36,5 +39,5 @@ export class MyApp {
     });
   }
 }
-
+enableProdMode();
 ionicBootstrap(MyApp);
