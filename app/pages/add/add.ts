@@ -20,7 +20,7 @@ export class AddPage {
             this.todoItem = this.getParams.val().description
         }
         else{
-        console.log(this.getParams.val())
+     //   console.log(this.getParams.val())
         this.todoItem = "";
     }
     }

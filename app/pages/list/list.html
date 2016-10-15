@@ -15,7 +15,7 @@
         <ion-item-sliding *ngFor="let todo of todoList; let i = index">
             <ion-item>
                 <h2 style="width:20%;float:left">{{todo.val().description}}</h2>
-                <!--<label style="float:right;font-size:10px" class="date">{{todo.timestamp| date }}</label>-->
+
             </ion-item>
             <ion-item-options>
                 <button danger (click)="delete(i)">

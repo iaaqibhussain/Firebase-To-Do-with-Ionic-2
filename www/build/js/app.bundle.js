@@ -63,7 +63,7 @@ var AddPage = (function () {
             this.todoItem = this.getParams.val().description;
         }
         else {
-            console.log(this.getParams.val());
+            //   console.log(this.getParams.val())
             this.todoItem = "";
         }
     }
