@@ -25,8 +25,6 @@ export class HomePage {
   }
   constructor(public navCtrl: NavController, public toast: ToastController, public loadingController : LoadingController) {
   
-    this.userLogin.email = "a@c.com"
-    this.userLogin.password = "111111"
     FirebaseService.getInstance()
     
   }
