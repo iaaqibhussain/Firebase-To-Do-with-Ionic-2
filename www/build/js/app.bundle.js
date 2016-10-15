@@ -135,8 +135,6 @@ var HomePage = (function () {
             email: '',
             password: ''
         };
-        this.userLogin.email = "a@c.com";
-        this.userLogin.password = "111111";
         firebaseservice_1.FirebaseService.getInstance();
     }
     HomePage.prototype.goToSignUp = function () {
